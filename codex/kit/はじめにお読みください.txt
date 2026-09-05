@@ -1,0 +1,25 @@
+AI秘書セットアップキット（Windows / Codex 版）
+
+■ 全体の流れ（2ステップ・約20分）
+  step 1: setup1-codex.bat をダブルクリック（5〜10分・待つだけ）
+  step 2: デスクトップにできる「AI秘書を起動 (Codex)」をダブルクリック → ログイン → 1行貼り付け
+          あとは Codex が画面で案内します（Google連携・音声入力まで）
+
+■ ご用意いただくもの
+  ・ChatGPT の有料プラン（Plus 以上）のアカウント  https://chatgpt.com
+  ・Google アカウント（Gmail／カレンダー）のログイン情報
+
+■ setup1-codex.bat 実行時の注意
+  ・zip はデスクトップなどに「すべて展開」してから実行してください
+  ・「WindowsによってPCが保護されました」と出たら「詳細情報」→「実行」
+  ・「変更を許可しますか」の青い画面が出たら「はい」
+  ・黒い画面は閉じずにお待ちください。終わると「準備完了!」と出ます
+
+■ うまくいかないとき
+  ・パソコンを再起動して、もう一度 setup1-codex.bat を実行
+  ・それでもダメなら、同じフォルダにできる setup_log.txt を配布元にお送りください
+
+■ winget がない場合（古い Windows 10 など）
+  ・Git:      https://git-scm.com/download/win
+  ・Node.js:  https://nodejs.org/ （LTS）
+  それぞれインストール後、setup1-codex.bat を再実行してください

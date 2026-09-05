@@ -1,0 +1,4 @@
+# AI秘書スターター（Codex）初期設定
+# 変更したいときは Codex に「設定を変えて」と頼めば案内してくれます。
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
