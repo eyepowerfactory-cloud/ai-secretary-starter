@@ -118,16 +118,13 @@ rem [5/8] Codex の設定と AI秘書スキルの配置
 rem ---------------------------------------------
 set "CODEXDIR=%USERPROFILE%\.codex"
 if not exist "%CODEXDIR%" mkdir "%CODEXDIR%"
-if exist "%CODEXDIR%\config.toml" (
-    copy /y "%CODEXDIR%\config.toml" "%CODEXDIR%\config.toml.backup" >nul
-    echo [5/8] 既存の設定を config.toml.backup に退避しました。
-) else (
-    copy /y "%KITDIR%assets\config.toml" "%CODEXDIR%\config.toml" >nul
-)
+if exist "%CODEXDIR%\config.toml" copy /y "%CODEXDIR%\config.toml" "%CODEXDIR%\config.toml.backup" >nul
+powershell -NoProfile -ExecutionPolicy Bypass -File "%KITDIR%assets\ensure_codex_config.ps1" -ConfigPath "%CODEXDIR%\config.toml" -TemplatePath "%KITDIR%assets\config.toml" >> "%LOG%" 2>&1
+if errorlevel 1 copy /y "%KITDIR%assets\config.toml" "%CODEXDIR%\config.toml" >nul
 set "SKILLDIR=%USERPROFILE%\.agents\skills"
 if not exist "%SKILLDIR%" mkdir "%SKILLDIR%"
 xcopy /e /i /y "%KITDIR%assets\starter\skills" "%SKILLDIR%" >> "%LOG%" 2>&1
-echo [5/8] Codex の設定と AI秘書スキル(4つ)を配置しました。
+echo [5/8] Codex の設定(許可を求めない)と AI秘書スキル(4つ)を配置しました。
 
 rem ---------------------------------------------
 rem [6/8] デスクトップに作業フォルダ「AI」を作成 (秘書の机)
@@ -152,7 +149,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "%KITDIR%assets\make_shortcu
 if errorlevel 1 (
     echo [7/8] ショートカットの作成に失敗しました。あとで Codex に頼めば作れます。
 ) else (
-    echo [7/8] デスクトップに「AI秘書を起動 (Codex)」のショートカットを作りました。
+    echo [7/8] デスクトップに「AI秘書 (Codex)」のショートカットを作りました。
 )
 
 rem ---------------------------------------------
@@ -162,15 +159,17 @@ echo %SETUP_LINE%| clip
 (
 echo AI秘書セットアップ (Codex) step 2 / 2
 echo.
-echo 1. デスクトップの「AI秘書を起動 (Codex)」をダブルクリック
-echo 2. 初回はブラウザが開くので ChatGPT にログインする ^(Plus 以上の有料プラン^)
-echo 3. 黒い画面に、次の1行を貼り付けて Enter:
+echo 1. デスクトップの「AI秘書 (Codex)」をダブルクリック ^(Codex アプリが開きます^)
+echo 2. 初回は ChatGPT にログインする ^(Plus 以上の有料プラン^)
+echo 3. 作業フォルダ ^(プロジェクト^) に、デスクトップの「AI」フォルダを選ぶ
+echo 4. チャット欄に、次の1行を貼り付けて Enter:
 echo.
 echo %SETUP_LINE%
 echo.
-echo ^(この1行はすでにコピー済みです。右クリックまたは Ctrl+V で貼り付けできます^)
+echo ^(この1行はすでにコピー済みです。Ctrl+V で貼り付けできます^)
 echo.
 echo あとは Codex が画面で案内しながら、Google連携・音声入力まで進めてくれます。
+echo アプリが開かないときは「AI秘書を起動 ^(Codex・黒い画面^)」でも同じことができます。
 ) > "%DESK%\AI秘書_次にやること_Codex.txt"
 
 echo [8/8] パソコン側の準備が完了しました。
@@ -178,10 +177,11 @@ echo.
 echo =================================================
 echo   準備完了! 次にやること (step 2 / 2)
 echo =================================================
-echo   1. デスクトップの「AI秘書を起動 (Codex)」をダブルクリック
-echo   2. ブラウザで ChatGPT にログイン (Plus以上の有料プラン)
-echo   3. 黒い画面に次の1行を貼り付けて Enter
-echo      (すでにコピー済み。右クリック or Ctrl+V で貼れます)
+echo   1. デスクトップの「AI秘書 (Codex)」をダブルクリック (アプリが開く)
+echo   2. ChatGPT にログイン (Plus以上の有料プラン)
+echo   3. 作業フォルダに、デスクトップの「AI」を選ぶ
+echo   4. チャット欄に次の1行を貼り付けて Enter
+echo      (すでにコピー済み。Ctrl+V で貼れます)
 echo.
 echo   %SETUP_LINE%
 echo.

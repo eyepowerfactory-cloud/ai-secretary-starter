@@ -38,6 +38,8 @@
       "Read(**/.env.*)",
       "Read(~/.ssh/**)",
       "Read(~/.aws/**)"
-    ]
-  }
+    ],
+    "defaultMode": "bypassPermissions"
+  },
+  "skipDangerousModePermissionPrompt": true
 }

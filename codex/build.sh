@@ -14,6 +14,7 @@ bom_crlf() { printf '\xEF\xBB\xBF'; crlf; }
 iconv -f UTF-8 -t CP932 kit/setup1-codex.bat | crlf > "$OUT/setup1-codex.bat"
 bom_crlf < "kit/はじめにお読みください.txt" > "$OUT/はじめにお読みください.txt"
 bom_crlf < kit/assets/make_shortcuts_codex.ps1 > "$OUT/assets/make_shortcuts_codex.ps1"
+bom_crlf < kit/assets/ensure_codex_config.ps1 > "$OUT/assets/ensure_codex_config.ps1"
 cp kit/assets/config.toml "$OUT/assets/config.toml"
 cp web/setup-codex.md "$OUT/assets/SETUP.md"
 # 共用スターター（tasks/catalog/memory/skills）+ Codex固有の AGENTS.md
