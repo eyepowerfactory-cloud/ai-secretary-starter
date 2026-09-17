@@ -1,0 +1,31 @@
+AI秘書セットアップキット（Windows / Codex・設定のみ版）
+
+■ この版が向いている人
+  ・Codex（コマンド版またはデスクトップアプリ）はもう入っている
+  ・Google 連携（Gmail／カレンダー／ドライブ のプラグイン or MCP）も済んでいる
+  → 残りの「AI秘書の設定・スキル・作業フォルダ・デスクトップの入口」だけを入れます
+  （Codex から入れたい人はフル版 setup1-codex.bat をお使いください）
+
+■ 流れ（約1分＋Codex の案内 約10分）
+  step 1: setup1-codex-settings-only.bat をダブルクリック
+  step 2: デスクトップにできる「AI秘書 (Codex)」をダブルクリック → 「AI」フォルダを選ぶ → 1行を貼り付け
+          Codex が Google 連携を飛ばして、残りを画面で案内します
+
+■ やること・やらないこと
+  やる  : ~/.codex/config.toml に「許可を求めない」設定を足す（既存のキーは残し、backup も作る）
+          ~/.agents/skills に AI秘書スキル4つを置く
+          デスクトップに「AI」フォルダ（AGENTS.md / tasks.md / memory / SETUP.md）を作る
+          デスクトップに入口（AI秘書 (Codex) ほか）を作る
+  やらない: Git / Node.js / Codex のインストール、ログイン、Google 連携
+  聞く  : Codex デスクトップアプリが無いときだけ「入れますか？」と聞きます（30秒で「入れない」）
+
+■ 実行時の注意
+  ・zip はデスクトップなどに「すべて展開」してから実行してください
+  ・「WindowsによってPCが保護されました」と出たら「詳細情報」→「実行」
+
+■ 元に戻したいとき
+  ・設定: %USERPROFILE%\.codex\config.toml.backup を config.toml に戻す
+  ・AI フォルダ・ショートカットはそのまま削除して大丈夫です
+
+■ うまくいかないとき
+  ・同じフォルダにできる setup_log.txt を配布元にお送りください

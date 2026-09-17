@@ -23,3 +23,17 @@ rsync -a --exclude '.DS_Store' starter/ "$OUT/assets/starter/"
 python3 kit/make_zip.py "$OUT" "dist/${NAME}.zip"
 echo "build ok: dist/${NAME}.zip"
 unzip -l "dist/${NAME}.zip" | tail -n +4 | head -30
+
+# ---- 設定のみ版（Claude Code / MCP 導入済みの人向け: インストール工程なし）----
+NAME2="AI秘書セットアップキット_Windows_設定のみ_${VERSION}"
+OUT2="dist/$NAME2"
+rm -rf "$OUT2" "dist/${NAME2}.zip"
+mkdir -p "$OUT2/assets"
+iconv -f UTF-8 -t CP932 kit/setup1-settings-only.bat | crlf > "$OUT2/setup1-settings-only.bat"
+bom_crlf < "kit/はじめにお読みください_設定のみ.txt" > "$OUT2/はじめにお読みください.txt"
+bom_crlf < kit/assets/make_shortcuts.ps1 > "$OUT2/assets/make_shortcuts.ps1"
+bom_crlf < kit/assets/merge_settings.ps1 > "$OUT2/assets/merge_settings.ps1"
+cp kit/assets/settings.json "$OUT2/assets/settings.json"
+rsync -a --exclude '.DS_Store' starter/ "$OUT2/assets/starter/"
+python3 kit/make_zip.py "$OUT2" "dist/${NAME2}.zip"
+echo "build ok: dist/${NAME2}.zip"

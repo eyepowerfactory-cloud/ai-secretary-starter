@@ -1,0 +1,32 @@
+AI秘書セットアップキット（Windows・設定のみ版）
+
+■ この版が向いている人
+  ・Claude Code（または Claude デスクトップアプリ）はもう入っている
+  ・Google 連携（カレンダー／Gmail／ドライブ の MCP）も済んでいる
+  → 残りの「AI秘書の設定・スキル・作業フォルダ・デスクトップの入口」だけを入れます
+  （Claude Code から入れたい人はフル版 setup1.bat をお使いください）
+
+■ 流れ（約1分＋Claude の案内 約10分）
+  step 1: setup1-settings-only.bat をダブルクリック
+  step 2: デスクトップにできる「AI秘書セットアップ開始」をダブルクリック → 1行を Enter
+          Claude が Google 連携を飛ばして、残りを画面で案内します
+
+■ やること・やらないこと
+  やる  : ~/.claude/settings.json に「許可を求めない」設定を足す（既存の設定は残し、backup も作る）
+          ~/.claude/skills に AI秘書スキル4つを置く
+          デスクトップに「AI」フォルダ（CLAUDE.md / tasks.md / memory）を作る
+          デスクトップに入口（AI秘書 (Claude) ほか）を作る
+  やらない: Git / Node.js / Claude Code のインストール、ログイン、Google 連携
+  聞く  : Claude デスクトップアプリが無いときだけ「入れますか？」と聞きます（30秒で「入れない」）
+
+■ 実行時の注意
+  ・zip はデスクトップなどに「すべて展開」してから実行してください
+  ・「WindowsによってPCが保護されました」と出たら「詳細情報」→「実行」
+  ・アプリを入れる場合のみ「変更を許可しますか」の青い画面が出ることがあります →「はい」
+
+■ 元に戻したいとき
+  ・設定: %USERPROFILE%\.claude\settings.json.backup を settings.json に戻す
+  ・AI フォルダ・ショートカットはそのまま削除して大丈夫です
+
+■ うまくいかないとき
+  ・同じフォルダにできる setup_log.txt を配布元にお送りください
