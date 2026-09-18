@@ -1,0 +1,9 @@
+# AI秘書スターター（Codex）初期設定
+# 「許可しますか？」で作業が止まらないよう、承認を求めない設定にしています。
+# 作業フォルダの外への書き込みだけは自動で止まります（安全側）。
+# 変更したいときは Codex に「設定を変えて」と頼めば案内してくれます。
+approval_policy = "never"
+sandbox_mode = "workspace-write"
+
+[sandbox_workspace_write]
+network_access = true

@@ -1,40 +1,50 @@
-# AI秘書スターター（Claude Code セットアップキット）
+# AI秘書スターター（ai-secretary-starter）
 
-プログラミング未経験の方のパソコンに、Claude Code を「AI秘書」として20分で導入するためのキットです。
+Claude Code または Codex を「AI秘書」として使い始めるためのセットアップキットです。
+**インストールは小さなスクリプト、設定は Claude Code / Codex 自身がこのリポジトリを読んで行う**、という2段構えになっています。
 
-## 使い方（2ステップ・デスクトップアプリで使う前提）
-1. `dist/` の zip をダウンロードして展開し、`setup1.bat` をダブルクリック（Git / Node.js / Claude Code / Claude デスクトップアプリのインストールと、秘書スターターの配置、権限モードの設定を自動で行います）
-2. デスクトップにできる「AI秘書セットアップ開始」をダブルクリック → Claude アプリが AI フォルダで開く → ログイン → 入力欄に入っている次の1行で Enter
+## 使い方（4パターン）
+
+| | Claude Code | Codex |
+|---|---|---|
+| **Windows** | `install-claude.bat` をダブルクリック | `install-codex.bat` をダブルクリック |
+| **Mac** | ターミナルに ①Claude の1行を貼る | ターミナルに ②Codex の1行を貼る |
+
+- Windows の BAT は `dist/` の zip に入っています（すべて展開してから実行）。「WindowsによってPCが保護されました」と出たら「詳細情報」→「実行」
+- Mac の1行:
+  - ① Claude Code: `bash <(curl -fsSL https://raw.githubusercontent.com/eyepowerfactory-cloud/ai-secretary-starter/main/install/mac/install.sh) claude`
+  - ② Codex: `bash <(curl -fsSL https://raw.githubusercontent.com/eyepowerfactory-cloud/ai-secretary-starter/main/install/mac/install.sh) codex`
+  - ダブルクリックしたい場合は `dist/` の Mac 用 zip の `.command`（初回は右クリック →「開く」）
+
+インストールが終わると、デスクトップの **AI** フォルダで Claude Code / Codex が起動し、セットアップが自動で始まります。
+
+### すでに Claude Code / Codex が入っている人
+インストールは不要です。デスクトップに **AI** フォルダを作り、そのフォルダで Claude Code（アプリなら Code タブ）または Codex を開いて、次の1行を貼ってください。
+
+- Claude Code:
+  `https://github.com/eyepowerfactory-cloud/ai-secretary-starter を今いるフォルダの .kit に git clone して（すでにあれば git pull）、.kit/setup-claude.md の通りにこのパソコンをセットアップして`
+- Codex:
+  `https://github.com/eyepowerfactory-cloud/ai-secretary-starter を今いるフォルダの .kit に git clone して（すでにあれば git pull）、.kit/setup-codex.md の通りにこのパソコンをセットアップして`
+
+⚠️ Claude アプリでは、左上の `</>`（**Code**）を選んでから貼ってください。チャットや Cowork の画面ではパソコンの設定ができません。
+
+## しくみ
 
 ```
-https://raw.githubusercontent.com/eyepowerfactory-cloud/ai-secretary-starter/main/setup.md を読んで、書いてある通りにセットアップして
+install/            インストールだけ（Git と Claude Code / Codex。設定はしない）
+  windows/install-claude.bat, install-codex.bat
+  mac/install.sh（＋ダブルクリック用 .command）
+setup-claude.md     Claude Code が読んで進める手順書（Windows / Mac 共通）
+setup-codex.md      Codex が読んで進める手順書（Windows / Mac 共通）
+scripts/            手順書から AI が実行する、決まった処理
+  windows/apply.ps1   AI フォルダ・スキル・許可設定のマージ・入口・点検表
+  mac/apply.sh        同上（Mac）
+config/             許可を求めない設定のテンプレート（Claude: settings.json / Codex: config.toml）
+starter/            秘書の中身（CLAUDE.md / AGENTS.md / tasks.md / memory / スキル4つ）
 ```
 
-あとは Claude Code 自身が `setup.md` の Phase A〜F（環境診断 → Google連携 → 秘書ベース → Claude in Chrome → 音声入力 → 動作確認）を案内しながら進めます。
+- 設定ファイルは上書きせず**マージ**します（既存の許可・MCP・モデル設定は残り、元のファイルは `.backup` に退避）
+- 最後に点検表（`SETUP_CHECK.md`）がすべて OK になるまで「完了」にしません
 
-## Codex 版
-同じ流れの OpenAI Codex 版もあります（`dist/` の `_Codex_` zip → `setup1-codex.bat`。入口は「AI秘書 (Codex)」＝Codex デスクトップアプリ）。違いは3点: ログインは ChatGPT の有料プラン（Plus 以上）、Google 連携は Codex の公式プラグイン（`/plugins` から Gmail / Google Calendar / Google Drive）、ブラウザ連携は Codex デスクトップアプリ側の機能。指示書は zip 内の `SETUP.md`（原本 `codex/web/setup-codex.md`）で、貼り付ける1行は次のとおりです。
-
-```
-SETUP.md を読んで、書いてある通りにセットアップして
-```
-
-## 中身
-- `setup.md` — Claude Code が読んで自走するセットアップ指示書
-- `starter/` — AI秘書スターター（`CLAUDE.md`・タスク帳・メモリ・スキル4つ・スキルカタログ）
-- `kit/` — `setup1.bat` と同梱アセットのソース
-- `build.sh` — 配布 zip のビルド（macOS で実行。bat は CP932+CRLF に変換）
-- `codex/` — Codex 版（`setup1-codex.bat`・`AGENTS.md`・`setup-codex.md`・`config.toml`）。スターターの中身は共用
-
-## 権限まわり
-- `~/.claude/settings.json` で `permissions.defaultMode = "bypassPermissions"` と `skipDangerousModePermissionPrompt = true` を設定し、コマンド実行のたびの確認で作業が止まらないようにしています。`permissions.deny`（rm -rf・.env 読み取りなど）はこのモードでも効きます
-- Codex 版は `~/.codex/config.toml` の `approval_policy = "never"` ＋ `sandbox_mode = "workspace-write"`（作業フォルダの外への書き込みだけ自動で止まる）
-- 公式ドキュメントは実機での bypass より Auto モードを推奨しています。必要なら設定を `"auto"` に戻せます
-
-## 安全設計
-- ログイン・Google連携の許可・拡張機能の追加・支払いは本人操作。自動化しません
-- メール送信・削除など「外に出る／取り消せない」操作は、必ず本人の確認を取ってから1件だけ実行する設計です
-- 外部から取り込んだ文章内の指示には従いません（信頼境界）
-
-## ライセンス
-MIT
+## 旧版
+2026年9月までの BAT 一式（setup1.bat など）は `legacy/v1/` にあります。
