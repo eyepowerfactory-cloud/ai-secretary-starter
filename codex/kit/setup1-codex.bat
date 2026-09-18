@@ -108,7 +108,7 @@ rem ---------------------------------------------
 echo [4/8] Codex デスクトップアプリをインストールしています (Microsoft Store 経由)...
 winget install --id 9PLM9XGG6VKS -s msstore --accept-package-agreements --accept-source-agreements >> "%LOG%" 2>&1
 if errorlevel 1 (
-    echo        アプリの自動インストールができませんでした。あとで Codex に頼めば案内してくれます (無くても秘書は動きます)。
+    echo        アプリの自動インストールができませんでした。あとで Codex に頼めば案内してくれます ^(無くても秘書は動きます^)。
 ) else (
     echo        Codex デスクトップアプリのインストールが完了しました。
 )
@@ -149,7 +149,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "%KITDIR%assets\make_shortcu
 if errorlevel 1 (
     echo [7/8] ショートカットの作成に失敗しました。あとで Codex に頼めば作れます。
 ) else (
-    echo [7/8] デスクトップに「AI秘書 (Codex)」のショートカットを作りました。
+    echo [7/8] デスクトップに「AI秘書 ^(Codex^)」のショートカットを作りました。
 )
 
 rem ---------------------------------------------

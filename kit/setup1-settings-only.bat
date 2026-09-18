@@ -40,7 +40,7 @@ if errorlevel 1 (
     echo        黒い画面でも使いたい場合は、フル版の setup1.bat を実行してください。
 ) else (
     for /f "usebackq delims=" %%V in (`claude --version 2^>nul`) do set "CLAUDEVER=%%V"
-    echo [確認] Claude Code は導入済みです (%CLAUDEVER%)。
+    echo [確認] Claude Code は導入済みです ^(%CLAUDEVER%^)。
 )
 
 rem ---------------------------------------------
@@ -54,7 +54,7 @@ if exist "%CLAUDEDIR%\settings.json" (
 )
 powershell -NoProfile -ExecutionPolicy Bypass -File "%KITDIR%assets\merge_settings.ps1" -ConfigPath "%CLAUDEDIR%\settings.json" -TemplatePath "%KITDIR%assets\settings.json" >> "%LOG%" 2>&1
 if errorlevel 1 (
-    echo        設定のマージに失敗したため、設定ファイルをそのまま置きます (退避済み)。
+    echo        設定のマージに失敗したため、設定ファイルをそのまま置きます ^(退避済み^)。
     copy /y "%KITDIR%assets\settings.json" "%CLAUDEDIR%\settings.json" >nul
     if errorlevel 1 (
         echo [1/5] 設定ファイルの配置に失敗しました。zip を全部展開してから実行してください。
@@ -110,7 +110,7 @@ echo        Claude デスクトップアプリをインストールしていま�
 winget install -e --id Anthropic.Claude --silent --accept-package-agreements --accept-source-agreements >> "%LOG%" 2>&1
 if errorlevel 1 (
     echo        自動インストールができなかったので、公式インストーラーをダウンロードして開きます。
-    echo        画面の案内に従ってインストールしてください (終わったらこの黒い画面に戻ります)。
+    echo        画面の案内に従ってインストールしてください ^(終わったらこの黒い画面に戻ります^)。
     powershell -NoProfile -Command "Invoke-WebRequest -Uri 'https://claude.ai/api/desktop/win32/x64/setup/latest/redirect' -OutFile \"$env:TEMP\ClaudeSetup.exe\"; Start-Process \"$env:TEMP\ClaudeSetup.exe\" -Wait" >> "%LOG%" 2>&1
 )
 set "CLAUDEAPP=1"
@@ -124,7 +124,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "%KITDIR%assets\make_shortcu
 if errorlevel 1 (
     echo [4/5] ショートカットの作成に失敗しました。あとで Claude に頼めば作れます。
 ) else (
-    echo [4/5] デスクトップに「AI秘書 (Claude)」「AI秘書セットアップ開始」「AI秘書を起動 (黒い画面)」を作りました。
+    echo [4/5] デスクトップに「AI秘書 ^(Claude^)」「AI秘書セットアップ開始」「AI秘書を起動 ^(黒い画面^)」を作りました。
 )
 
 rem ---------------------------------------------

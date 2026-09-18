@@ -2,6 +2,7 @@
 # Codex版 配布物ビルド: codex/kit + 共用 starter -> dist/AI秘書セットアップキット_Windows_Codex_<ver>.zip
 set -euo pipefail
 cd "$(dirname "$0")"
+python3 ../kit/lint_bat.py kit/*.bat   # 括弧バグがあればここで止める
 VERSION="${1:-v1.0}"
 NAME="AI秘書セットアップキット_Windows_Codex_${VERSION}"
 OUT="../dist/$NAME"

@@ -39,7 +39,7 @@ if errorlevel 1 (
     echo        黒い画面でも使いたい場合は、フル版の setup1-codex.bat を実行してください。
 ) else (
     for /f "usebackq delims=" %%V in (`codex --version 2^>nul`) do set "CODEXVER=%%V"
-    echo [確認] Codex は導入済みです (%CODEXVER%)。
+    echo [確認] Codex は導入済みです ^(%CODEXVER%^)。
 )
 
 rem ---------------------------------------------
@@ -54,7 +54,7 @@ if exist "%CODEXDIR%\config.toml" (
 powershell -NoProfile -ExecutionPolicy Bypass -File "%KITDIR%assets\ensure_codex_config.ps1" -ConfigPath "%CODEXDIR%\config.toml" -TemplatePath "%KITDIR%assets\config.toml" >> "%LOG%" 2>&1
 if errorlevel 1 (
     if exist "%CODEXDIR%\config.toml" (
-        echo        設定の追記に失敗しました。既存の config.toml はそのまま残しています (setup_log.txt 参照)。
+        echo        設定の追記に失敗しました。既存の config.toml はそのまま残しています ^(setup_log.txt 参照^)。
     ) else (
         copy /y "%KITDIR%assets\config.toml" "%CODEXDIR%\config.toml" >nul
     )
@@ -100,7 +100,7 @@ if errorlevel 2 (
 echo        Codex デスクトップアプリをインストールしています (Microsoft Store 経由)...
 winget install --id 9PLM9XGG6VKS -s msstore --accept-package-agreements --accept-source-agreements >> "%LOG%" 2>&1
 if errorlevel 1 (
-    echo        アプリの自動インストールができませんでした。あとで Codex に頼めば案内してくれます (無くても秘書は動きます)。
+    echo        アプリの自動インストールができませんでした。あとで Codex に頼めば案内してくれます ^(無くても秘書は動きます^)。
 ) else (
     set "CODEXAPP=1"
     echo        Codex デスクトップアプリのインストールが完了しました。
@@ -114,7 +114,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "%KITDIR%assets\make_shortcu
 if errorlevel 1 (
     echo [4/4] ショートカットの作成に失敗しました。あとで Codex に頼めば作れます。
 ) else (
-    echo [4/4] デスクトップに「AI秘書 (Codex)」「AI秘書を起動 (Codex・黒い画面)」を作りました。
+    echo [4/4] デスクトップに「AI秘書 ^(Codex^)」「AI秘書を起動 ^(Codex・黒い画面^)」を作りました。
 )
 echo %SETUP_LINE%| clip
 (

@@ -153,7 +153,7 @@ echo [6/8] Claude デスクトップアプリをインストールしていま�
 winget install -e --id Anthropic.Claude --silent --accept-package-agreements --accept-source-agreements >> "%LOG%" 2>&1
 if errorlevel 1 (
     echo        自動インストールができなかったので、公式インストーラーをダウンロードして開きます。
-    echo        画面の案内に従ってインストールしてください (終わったらこの黒い画面に戻ります)。
+    echo        画面の案内に従ってインストールしてください ^(終わったらこの黒い画面に戻ります^)。
     powershell -NoProfile -Command "Invoke-WebRequest -Uri 'https://claude.ai/api/desktop/win32/x64/setup/latest/redirect' -OutFile \"$env:TEMP\ClaudeSetup.exe\"; Start-Process \"$env:TEMP\ClaudeSetup.exe\" -Wait" >> "%LOG%" 2>&1
 )
 echo        Claude デスクトップアプリの導入手順が完了しました。
@@ -165,7 +165,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "%KITDIR%assets\make_shortcu
 if errorlevel 1 (
     echo [7/8] ショートカットの作成に失敗しました。あとで Claude に頼めば作れます。
 ) else (
-    echo [7/8] デスクトップに「AI秘書 (Claude)」「AI秘書セットアップ開始」を作りました。
+    echo [7/8] デスクトップに「AI秘書 ^(Claude^)」「AI秘書セットアップ開始」を作りました。
 )
 
 rem ---------------------------------------------

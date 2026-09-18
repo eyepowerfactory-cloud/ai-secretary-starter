@@ -5,6 +5,7 @@
 #  - starter/ は assets/starter に同梱（BATが ~/.claude/skills と Desktop/AI へ配置）
 set -euo pipefail
 cd "$(dirname "$0")"
+python3 kit/lint_bat.py kit/*.bat   # 括弧バグがあればここで止める
 VERSION="${1:-v1.0}"
 NAME="AI秘書セットアップキット_Windows_${VERSION}"
 OUT="dist/$NAME"
