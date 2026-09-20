@@ -6,6 +6,7 @@
 #   やること: Git（Xcode コマンドラインツール）と Claude Code / Codex を入れ、デスクトップに AI フォルダを作り、
 #            AI フォルダで Claude Code / Codex を起動してセットアップの1行を渡す。
 #   設定・スキル・入口は、起動した Claude Code / Codex が GitHub から取ってきて行う。
+REFERRAL="https://claude.ai/referral/HqNMYnZKXw"
 AGENT="$1"
 if [ "$AGENT" != "claude" ] && [ "$AGENT" != "codex" ]; then
   echo "usage: install.sh claude|codex"; exit 2
@@ -29,6 +30,19 @@ echo "設定は、このあと起動する $NAME が自分で行います。"
 echo "途中でパスワードを聞かれたら、Macにログインするときのパスワードを入れてください（文字は表示されません）。"
 echo
 pause "Enter キーで始めます（やめるときはこのウィンドウを閉じてください） "
+
+# ---- [0/3] Claude の有料プラン（未加入の人だけ）----
+#   登録はインストールより先。あとから入ると紹介リンクが効かない。
+if [ "$AGENT" = "claude" ]; then
+  echo
+  echo "[0/3] Claude Code を使うには Claude の有料プラン Pro が必要です。"
+  printf "       まだの方は Enter で登録ページを開きます（すでに持っている人は s + Enter で飛ばす）: "
+  read -r _ans </dev/tty || _ans=s
+  if [ "$_ans" != "s" ]; then
+    open "$REFERRAL" >/dev/null 2>&1 || true
+    pause "       登録が終わったら Enter を押してください "
+  fi
+fi
 
 # ---- [1/3] Git（Xcode コマンドラインツール）----
 if xcode-select -p >/dev/null 2>&1 && git --version >/dev/null 2>&1; then

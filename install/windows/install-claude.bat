@@ -12,6 +12,7 @@ rem        変更したら tools\lint_bat.py を通すこと。
 rem ------------------------------------------------------------
 set "LOG=%TEMP%\ai-secretary-install.log"
 set "REPO=https://github.com/eyepowerfactory-cloud/ai-secretary-starter"
+set "REFERRAL=https://claude.ai/referral/HqNMYnZKXw"
 set "FIRST=Clone %REPO% into a folder named .kit here - run git pull if .kit already exists; if git is missing, download %REPO%/archive/refs/heads/main.zip and extract it as .kit. Then read .kit/setup-claude.md and follow it step by step. Talk to me in Japanese."
 set "LINE_JA=%REPO% を今いるフォルダの .kit に git clone して (すでにあれば git pull)、.kit/setup-claude.md の通りにこのパソコンをセットアップして"
 echo ===== install-claude %date% %time% ===== > "%LOG%"
@@ -25,6 +26,21 @@ echo 設定は、このあと起動する Claude Code が自分で行います�
 echo 途中で青い確認画面が出たら「はい」を押してください。
 echo.
 pause
+
+rem ---- [0/4] Claude の有料プラン ----
+rem  Claude Code は Claude の有料プラン Pro で動く。未加入の人はここで先に登録してもらう。
+rem  注意: 登録はインストールより先。あとから入ると紹介リンクが効かない。
+echo.
+echo [0/4] Claude Code を使うには Claude の有料プラン Pro が必要です。
+echo        まだの方は、いまブラウザで登録ページを開きます。
+choice /c YN /n /t 30 /d N /m "       登録ページを開きますか? Y=開く / N=すでに持っている  30秒で N"
+if errorlevel 2 goto PLAN_END
+start "" "%REFERRAL%"
+echo.
+echo        ブラウザでページを開きました。登録が終わったら、
+echo        この黒い画面に戻って Enter を押してください。
+pause
+:PLAN_END
 
 rem ---- 使える道具を探すための PATH 読み直し ----
 call :REFRESH

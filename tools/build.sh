@@ -14,6 +14,7 @@ bash -n install/mac/install.sh scripts/mac/apply.sh
 
 crlf() { perl -pe 's/\r?\n/\r\n/'; }
 bom_crlf() { printf '\xEF\xBB\xBF'; crlf; }
+REFERRAL="https://claude.ai/referral/HqNMYnZKXw"
 mkdir -p dist
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
@@ -21,6 +22,13 @@ trap 'rm -rf "$TMP"' EXIT
 win_zip() { # agent label
   local a="$1" label="$2" name="AI秘書インストール_Windows_$2"
   local d="$TMP/$name"; mkdir -p "$d"
+  local plan=""
+  if [ "$a" = "claude" ]; then plan="
+■ Claude の有料プラン
+  ${label} を使うには Claude の有料プラン Pro が必要です。
+  まだの方は、インストールより先に下のリンクから登録してください。
+  ${REFERRAL}
+"; fi
   iconv -f UTF-8 -t CP932 "install/windows/install-${a}.bat" | crlf > "$d/install-${a}.bat"
   bom_crlf > "$d/はじめにお読みください.txt" <<EOF
 AI秘書インストール（Windows / ${label}）
@@ -33,6 +41,7 @@ AI秘書インストール（Windows / ${label}）
   4. 最後の Enter で ${label} が起動し、セットアップが自動で始まります
      はじめてのときはログイン画面が出るので、案内に従ってください
 
+${plan}
 ■ このファイルがやること
   Git と ${label} を入れて、デスクトップに AI フォルダを作るだけです。
   設定（許可を求めない設定・秘書のスキル・デスクトップの入口）は、
@@ -52,6 +61,13 @@ EOF
 mac_zip() { # agent label
   local a="$1" label="$2" name="AI秘書インストール_Mac_$2"
   local d="$TMP/$name"; mkdir -p "$d"
+  local plan=""
+  if [ "$a" = "claude" ]; then plan="
+■ Claude の有料プラン
+  ${label} を使うには Claude の有料プラン Pro が必要です。
+  まだの方は、インストールより先に下のリンクから登録してください。
+  ${REFERRAL}
+"; fi
   cp install/mac/install.sh "install/mac/install-${a}.command" "$d/"
   chmod +x "$d/install.sh" "$d/install-${a}.command"
   cat > "$d/はじめにお読みください.txt" <<EOF
@@ -67,6 +83,7 @@ AI秘書インストール（Mac / ${label}）
   3. ターミナルの案内どおりに Enter を押す（5分ほど）
   4. 最後の Enter で ${label} が起動し、セットアップが自動で始まります
 
+${plan}
 ■ このファイルがやること
   Git（Xcode コマンドラインツール）と ${label} を入れて、デスクトップに AI フォルダを作るだけです。
   設定は、起動した ${label} が GitHub の手順書を読んで行います。

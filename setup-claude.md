@@ -71,6 +71,7 @@ OS に合わせて **1回だけ** 実行する（何度実行しても壊れな�
 1. OS とバージョン
 2. `claude --version`（アプリだけで使っている場合は「アプリ内蔵」でよい）
 3. ログインしているアカウントが claude.ai のサブスクリプション（Pro/Max）か（アプリでログインしていれば通常 OK）。APIキー方式だと Phase B の連携が現れないので、その場合は `/login` で claude.ai アカウントに入り直すよう案内
+   - **まだ有料プランに入っていない場合**は、次のページから登録するよう案内する（講師の紹介リンク）: https://claude.ai/referral/HqNMYnZKXw
 4. **権限モード**: 持ち主に、入力欄のそばにあるモード選択が「Bypass permissions」になっているか見てもらう。なっていない（Manual / Auto）場合:
    - 設定 → Claude Code → 「Allow bypass permissions mode」をオンにしてもらう（Pro/Max はここで有効化が必要）
    - そのうえでモード選択から「Bypass permissions」を選んでもらう（このフォルダで一度選べば次回も記憶される）
@@ -129,7 +130,7 @@ Windows・Mac どちらも対応。Pro 以上のサブスクなら使える。
 
 1. 持ち主に聞く: 「音声入力アプリは **AquaVoice** と **Typeless** のどちらにしますか？（講師のおすすめがあればそれで）」。すでに入っていれば、動作確認（手順3）だけ行う
 2. 選んだ方のダウンロードページを案内する（ダウンロード・インストール・ログインは本人）:
-   - AquaVoice: `https://aquavoice.com`
+   - AquaVoice: `https://aquavoice.com/share?code=ZT-4YKL`（講師の紹介リンク。ここから入ってもらう）
    - Typeless: `https://typeless.com`
 3. インストール後の確認: 「メモ帳（Mac はメモ）を開いて、音声入力のキーを押しながら『今日はいい天気です』と喋ってみてください」→ 文字が出たら OK
 4. Claude の入力欄でも同じように喋って、文章が入ることを確認
