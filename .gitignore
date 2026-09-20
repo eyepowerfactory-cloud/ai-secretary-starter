@@ -1,2 +1,5 @@
 .DS_Store
 setup_log.txt
+
+# 何かの拍子に生えるローカル作業ディレクトリへのシンボリックリンク（公開しない）
+/taisun_agent
