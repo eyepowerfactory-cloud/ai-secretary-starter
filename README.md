@@ -33,9 +33,11 @@ Claude Code または Codex を「AI秘書」として使い始めるための�
 ```
 install/            インストールだけ（Git と Claude Code / Codex。設定はしない）
   windows/install-claude.bat, install-codex.bat
+  windows/diagnose.bat  つまずいたとき用の診断（zip では「診断.bat」）
   mac/install.sh（＋ダブルクリック用 .command）
 setup-claude.md     Claude Code が読んで進める手順書（Windows / Mac 共通）
 setup-codex.md      Codex が読んで進める手順書（Windows / Mac 共通）
+troubleshoot.md     つまずいたときに AI が読む、切り分け・修復の手順書
 scripts/            手順書から AI が実行する、決まった処理
   windows/apply.ps1   AI フォルダ・スキル・許可設定のマージ・入口・点検表
   mac/apply.sh        同上（Mac）
@@ -45,6 +47,18 @@ starter/            秘書の中身（CLAUDE.md / AGENTS.md / tasks.md / memory 
 
 - 設定ファイルは上書きせず**マージ**します（既存の許可・MCP・モデル設定は残り、元のファイルは `.backup` に退避）
 - 最後に点検表（`SETUP_CHECK.md`）がすべて OK になるまで「完了」にしません
+
+## うまくいかないとき
+
+zip の中の **「診断.bat」** をダブルクリックします（30秒・何も変更しません）。
+
+1. いま何が入っていて何が足りないかを調べ、デスクトップの `AI秘書_診断結果.txt` に保存し、クリップボードにコピーします
+2. Claude Code / Codex がすでに入っていれば、そのまま AI が起動し、`troubleshoot.md` の手順で
+   **その場で切り分け → 修復 → 元の手順書への復帰** まで伴走します
+3. まだ AI が入っていない場合は、コピーされた内容をそのまま講師に送ってもらえば状況が伝わります
+
+途中で止まる代表例（ウイルス対策にブロックされた・Git で止まる・「認識されません」・ログインできない）の
+手当ては、zip 同梱の「うまくいかないとき.txt」と `troubleshoot.md` に書いてあります。
 
 ## 旧版
 2026年9月までの BAT 一式（setup1.bat など）は `legacy/v1/` にあります。

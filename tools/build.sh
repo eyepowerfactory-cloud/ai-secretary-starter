@@ -19,8 +19,8 @@ mkdir -p dist
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
-win_zip() { # agent label
-  local a="$1" label="$2" name="AI秘書インストール_Windows_$2"
+win_zip() { # agent label [version]  version を付けると zip 名と展開先フォルダ名が変わる＝古いフォルダへの上書き展開を避けられる
+  local a="$1" label="$2" name="AI秘書インストール_Windows_$2${3:+_$3}"
   local d="$TMP/$name"; mkdir -p "$d"
   local plan=""
   if [ "$a" = "claude" ]; then plan="
@@ -30,15 +30,23 @@ win_zip() { # agent label
   ${REFERRAL}
 "; fi
   iconv -f UTF-8 -t CP932 "install/windows/install-${a}.bat" | crlf > "$d/install-${a}.bat"
+  iconv -f UTF-8 -t CP932 "install/windows/diagnose.bat" | crlf > "$d/診断.bat"
   bom_crlf > "$d/はじめにお読みください.txt" <<EOF
 AI秘書インストール（Windows / ${label}）
 
 ■ 手順
-  1. この zip を右クリック →「すべて展開」
-  2. 展開したフォルダの install-${a}.bat をダブルクリック
+  1. この zip を右クリック →「プロパティ」→ 下のほうの「許可する」に
+     チェックを入れて「OK」（項目が無ければそのまま次へ）
+  2. zip を右クリック →「すべて展開」→「展開」
+     ※ 前に展開した同じ名前のフォルダがあるときは、先にそのフォルダを
+       ごみ箱に入れてから展開してください（「上書きしますか」を出さない）
+  3. 展開してできたフォルダを開き、install-${a}.bat をダブルクリック
+     ※ zip の中を開いたまま実行しないでください（途中で止まります）
      「WindowsによってPCが保護されました」と出たら「詳細情報」→「実行」
-  3. 黒い画面の案内どおりに Enter を押す（5分ほど）
-  4. 最後の Enter で ${label} が起動し、セットアップが自動で始まります
+  4. 黒い画面の案内どおりに Enter を押す（5分ほど）
+     インストール中は進み具合が出ます。止まって見えたら、画面いちばん下の
+     タスクバーで点滅している盾のアイコンを押して「はい」
+  5. 最後の Enter で ${label} が起動し、セットアップが自動で始まります
      はじめてのときはログイン画面が出るので、案内に従ってください
 
 ${plan}
@@ -51,9 +59,13 @@ ${plan}
   このファイルは不要です。デスクトップに AI フォルダを作り、そこで ${label} を開いて、
   講師から送られた1行を貼ってください。
 
-■ うまくいかないとき
-  %TEMP%\\ai-secretary-install.log を講師に送ってください。
+■ うまくいかないとき（黒い画面が勝手に閉じた・bat ファイルが消えた など）
+  同じフォルダの「診断.bat」をダブルクリックしてください。30秒で状態を調べて、
+  ${label} が入っていれば、そのまま AI が原因の切り分けと修復を手伝います。
+  くわしくは「うまくいかないとき.txt」。
+  それでもだめなら %TEMP%\\ai-secretary-install.log を講師に送ってください。
 EOF
+  bom_crlf > "$d/うまくいかないとき.txt" < "install/windows/うまくいかないとき-${a}.txt"
   python3 tools/make_zip.py "$d" "dist/$name.zip"
   echo "built: dist/$name.zip"
 }
@@ -92,7 +104,7 @@ EOF
   echo "built: dist/$name.zip"
 }
 
-win_zip claude ClaudeCode
-win_zip codex Codex
+win_zip claude ClaudeCode v2.1
+win_zip codex Codex v2.1
 mac_zip claude ClaudeCode
 mac_zip codex Codex

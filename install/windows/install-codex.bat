@@ -9,12 +9,34 @@ rem           Codex を起動してセットアップの1行を渡す。
 rem  設定・スキル・ショートカットは、起動した Codex が GitHub から取ってきて行う。
 rem  注意: if/for の ( ) ブロックは使わない (括弧1文字で即終了する事故の再発防止)。
 rem        変更したら tools\lint_bat.py を通すこと。
+rem  v2.1 (2026-09-22): Windows セキュリティに止められない書き方に変更 (Claude 版と同じ)。
+rem        - PowerShell でネットのスクリプトを直接実行する書き方をやめた (ウイルス対策が
+rem          不審なスクリプトとして BAT ごと隔離し、黒い画面も落ちた)
+rem        - Git / Codex は winget (Microsoft 公式) を先に使い、だめなときだけ公式インストーラー
+rem        - winget は --source winget 固定 (Microsoft Store 側の同意待ちで止まるのを防ぐ)
+rem        - 進み具合を画面に出す (ログにだけ流すと「止まった」ように見えた)
+rem        - zip の中から直接開いたら、展開を促して止める
 rem ------------------------------------------------------------
 set "LOG=%TEMP%\ai-secretary-install.log"
+set "WG=--source winget --accept-package-agreements --accept-source-agreements"
 set "REPO=https://github.com/eyepowerfactory-cloud/ai-secretary-starter"
 set "FIRST=Clone %REPO% into a folder named .kit here - run git pull if .kit already exists; if git is missing, download %REPO%/archive/refs/heads/main.zip and extract it as .kit. Then read .kit/setup-codex.md and follow it step by step. Talk to me in Japanese."
 set "LINE_JA=%REPO% を今いるフォルダの .kit に git clone して (すでにあれば git pull)、.kit/setup-codex.md の通りにこのパソコンをセットアップして"
-echo ===== install-codex %date% %time% ===== > "%LOG%"
+echo ===== install-codex v2.1 %date% %time% ===== > "%LOG%"
+
+rem ---- zip の中から直接開かれたら止める (一時フォルダで動き、途中で消されやすい) ----
+echo %~dp0| findstr /i /c:".zip\\" >nul
+if errorlevel 1 goto ZIP_OK
+echo.
+echo  このファイルは zip の中から開かれています。このままでは正しく動きません。
+echo.
+echo   1. この黒い画面を閉じる
+echo   2. zip を右クリック →「すべて展開」
+echo   3. 展開してできたフォルダの中の install-codex.bat をダブルクリック
+echo.
+pause
+exit /b 1
+:ZIP_OK
 
 echo =================================================
 echo   AI秘書 インストール  Windows / Codex
@@ -33,8 +55,11 @@ where git >nul 2>&1
 if not errorlevel 1 goto GIT_OK
 where winget >nul 2>&1
 if errorlevel 1 goto GIT_SKIP
-echo [1/4] Git をインストールしています...
-winget install -e --id Git.Git --silent --accept-package-agreements --accept-source-agreements >> "%LOG%" 2>&1
+echo [1/4] Git をインストールしています... 1-3分かかります
+echo        下に進み具合が出ます。数字が止まって見えたら、画面の一番下のタスクバーで
+echo        点滅している盾のアイコンを押して「はい」を押してください。
+winget install -e --id Git.Git %WG%
+echo git winget exit=%errorlevel% >> "%LOG%"
 call :REFRESH
 where git >nul 2>&1
 if not errorlevel 1 goto GIT_OK
@@ -48,21 +73,37 @@ echo [1/4] Git OK
 rem ---- [2/4] Codex 本体 (公式インストーラー。Node.js は不要) ----
 where codex >nul 2>&1
 if not errorlevel 1 goto CODEX_OK
-echo [2/4] Codex をインストールしています...
-powershell -NoProfile -ExecutionPolicy Bypass -Command "$env:CODEX_NON_INTERACTIVE='1'; irm https://chatgpt.com/codex/install.ps1 | iex" >> "%LOG%" 2>&1
+echo [2/4] Codex をインストールしています... 1-3分かかります
+where winget >nul 2>&1
+if errorlevel 1 goto CODEX_ALT
+winget install -e --id OpenAI.Codex %WG%
+echo codex winget exit=%errorlevel% >> "%LOG%"
 call :REFRESH
 where codex >nul 2>&1
 if not errorlevel 1 goto CODEX_OK
-where winget >nul 2>&1
+:CODEX_ALT
+where npm >nul 2>&1
+if errorlevel 1 goto CODEX_PS
+echo        別の方法で試しています (npm)...
+call npm i -g @openai/codex
+echo codex npm exit=%errorlevel% >> "%LOG%"
+call :REFRESH
+where codex >nul 2>&1
+if not errorlevel 1 goto CODEX_OK
+:CODEX_PS
+echo        公式のインストーラーで試しています...
+curl -fsSL https://chatgpt.com/codex/install.ps1 -o "%TEMP%\codex-install.ps1"
 if errorlevel 1 goto CODEX_NG
-echo        別の方法で試しています...
-winget install -e --id OpenAI.Codex --silent --accept-package-agreements --accept-source-agreements >> "%LOG%" 2>&1
+powershell -NoProfile -ExecutionPolicy Bypass -File "%TEMP%\codex-install.ps1"
+echo codex ps1 exit=%errorlevel% >> "%LOG%"
+del "%TEMP%\codex-install.ps1" >nul 2>&1
 call :REFRESH
 where codex >nul 2>&1
 if not errorlevel 1 goto CODEX_OK
 :CODEX_NG
 echo [2/4] Codex が入りませんでした。パソコンを再起動して、もう一度このファイルを実行してください。
-echo        それでもだめなときは、ログ %LOG% を講師に送ってください。
+echo        それでもだめなときは、同じフォルダの「うまくいかないとき.txt」の手順で進めるか、
+echo        同じフォルダの「診断.bat」をダブルクリックして、出てきた内容を講師に送ってください。
 pause
 exit /b 1
 :CODEX_OK
@@ -77,7 +118,7 @@ echo [3/4] Codex デスクトップアプリも入れると、ブラウザ連携
 choice /c YN /n /t 30 /d N /m "       アプリを入れますか? Y=入れる / N=入れない (30秒で N)"
 if errorlevel 2 goto APP_END
 echo        アプリをインストールしています...
-winget install --id 9PLM9XGG6VKS -s msstore --accept-package-agreements --accept-source-agreements >> "%LOG%" 2>&1
+winget install --id 9PLM9XGG6VKS -s msstore --accept-package-agreements --accept-source-agreements
 goto APP_END
 :APP_OK
 echo [3/4] Codex デスクトップアプリ OK
